@@ -1,75 +1,93 @@
 <template>
   <div class="server">
-    <p>
-      <strong>Herzlich Willkommen bei der Installation zu SchuleIntern.</strong>
-      <br>
-      <br>
-      Bitte legen Sie sich folgende Daten bereit:
-    </p>
-    <ul>
-      <li>MySQL / MariaDB Datenbank mit passenden Zugangsdaten</li>
-      <li>Mailaccount mit passenden Zugangsdaten</li>
-    </ul>
 
-    <div class="box">
-        
-      <h3>Server</h3>
-
-
-
-      <ul>
-
-        <li>
-          <div class="box-long">
-            Schreibrechte im Übergeordnetem Verzeichnis
-            <p>
-              SchuleIntern speichert alle Daten außerhalb des von außen erreichbaren Verzeichnisses.
-            </p>
-            <div class="info">
-              {{values.upperDir}}
-            </div>
-          </div>
-          <div class="box-icon">
-            <img v-if="values.upperDirWriteable" src="../assets/icons/check.svg" alt="ok" title="ok"/>
-            <img v-else-if="!values.upperDirWriteable" src="../assets/icons/cancel.svg" alt="error" title="error"/>
-          </div>
-        </li>
-
-        <li>
-          <div class="box-long">
-            Schreibrechte im aktuellen Verzeichnis
-            <div class="info">
-              {{values.currentDir}}
-            </div>
-          </div>
-          <div class="box-icon">
-            <img v-if="values.currentDirWriteAble" src="../assets/icons/check.svg" alt="ok" title="ok"/>
-            <img v-else-if="!values.currentDirWriteAble" src="../assets/icons/cancel.svg" alt="error" title="error"/>
-          </div>
-        </li>
-
-        <li>
-          <div class="box-long">
-            PHP Version
-            <div class="info">
-              Min. 7.2 - Installiert: {{values.phpVersion}}
-            </div>
-          </div>
-          <div class="box-icon">
-            <img v-if="values.phpVersionCompare" src="../assets/icons/check.svg" alt="ok" title="ok"/>
-            <img v-else-if="values.phpVersionCompare == false" src="../assets/icons/cancel.svg" alt="error" title="error"/>
-          </div>
-        </li>
-
-      </ul>
-      <div class="btn-box">
-        <button v-if="btnState == false" @click="refresh"
-          class="btn">Erneut Testen</button>
+    <div class="outer-box">
+      <div class="box">
+        <p>
+          <strong>Herzlich Willkommen bei der Installation zu SchuleIntern.</strong>
+          <br>
+          <br>
+          <br>
+          Bitte legen Sie sich folgende Daten bereit:
+          <br><br>
+        </p>
+        <ul class="ullist">
+          <li>MySQL / MariaDB Datenbank mit passenden Zugangsdaten</li>
+          <li>Mailaccount mit passenden Zugangsdaten</li>
+        </ul>
       </div>
+      <div class="box box-bg-white">
+          
+        <h3>Server Test</h3>
 
+        <ul>
+
+          <li>
+            <div class="box-long">
+              Schreibrechte im Übergeordnetem Verzeichnis
+              <p>
+                SchuleIntern speichert alle Daten außerhalb des von außen erreichbaren Verzeichnisses.
+              </p>
+              <div class="info">
+                {{values.upperDir}}
+              </div>
+            </div>
+            <div class="box-icon">
+              <img v-if="!loading && values.upperDirWriteable" src="../assets/icons/check.svg" alt="ok" title="ok"/>
+              <img v-else-if="!loading && !values.upperDirWriteable" src="../assets/icons/cancel.svg" alt="error" title="error"/>
+              <img v-if="loading" src="../assets/icons/spinner.gif" alt="loading" title="loading"/>
+            </div>
+          </li>
+
+          <li>
+            <div class="box-long">
+              Schreibrechte im aktuellen Verzeichnis
+              <div class="info">
+                {{values.currentDir}}
+              </div>
+            </div>
+            <div class="box-icon">
+              <img v-if="!loading && values.currentDirWriteAble" src="../assets/icons/check.svg" alt="ok" title="ok"/>
+              <img v-else-if="!loading && !values.currentDirWriteAble" src="../assets/icons/cancel.svg" alt="error" title="error"/>
+              <img v-if="loading" src="../assets/icons/spinner.gif" alt="loading" title="loading"/>
+            </div>
+          </li>
+
+          <li>
+            <div class="box-long">
+              PHP Version
+              <div class="info">
+                Min. 7.2 - Installiert: {{values.phpVersion}}
+              </div>
+            </div>
+            <div class="box-icon">
+              <img v-if="!loading && values.phpVersionCompare" src="../assets/icons/check.svg" alt="ok" title="ok"/>
+              <img v-else-if="!loading && values.phpVersionCompare == false" src="../assets/icons/cancel.svg" alt="error" title="error"/>
+              <img v-if="loading" src="../assets/icons/spinner.gif" alt="loading" title="loading"/>
+            </div>
+          </li>
+
+          <li>
+            <div class="box-long">
+              Verbindung zum Update Server
+              <div class="info"></div>
+            </div>
+            <div class="box-icon">
+              <img v-if="!loading && values.branches" src="../assets/icons/check.svg" alt="ok" title="ok"/>
+              <img v-else-if="!loading && values.branches == false" src="../assets/icons/cancel.svg" alt="error" title="error"/>
+              <img v-if="loading" src="../assets/icons/spinner.gif" alt="loading" title="loading"/>
+            </div>
+          </li>
+
+        </ul>
+        <div class="btn-box">
+          <button v-if="btnState == false" @click="refresh"
+            class="btn">Erneut Testen</button>
+        </div>
+
+      </div>
     </div>
-
-    <div class="btn-box">
+    <div class="btn-outer-box">
       <button v-if="btnState" @click="next" class="btn">Weiter</button>
     </div>
 
@@ -91,7 +109,8 @@ export default {
   data: function () {
     return {
       values: false,
-      btnState: false
+      btnState: false,
+      loading: false
     }
   },
   created: function () {
@@ -102,9 +121,12 @@ export default {
 
       var that = this;
 
+      this.loading = true;
+
       axios.get(this.apiRoot+'setup.php?action=server')
       .then( function(response) {
         that.setData(response.data);
+        
       }).catch(function (error) {
 
         that.setData( {
@@ -118,7 +140,7 @@ export default {
 
     },
     setData: function (data) {
-console.log('setdata', data);
+
       this.values = data;
 
       if ( !this.required() ) {
@@ -126,6 +148,8 @@ console.log('setdata', data);
       } else {
           this.btnState = true;
       }
+
+      this.loading = false;
 
     },
     required: function () {

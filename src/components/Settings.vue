@@ -1,14 +1,13 @@
 <template>
   <div class="settings">
     
-    
     <form v-on:submit.prevent>
       <div class="btn-outer-box">
         <button @click="install" class="btn">Installieren</button>
       </div>
       
       <div class="outer-box">
-        <div class="box">
+        <div class="box box-bg-white">
           <h3 class="header-box green">Einstellungen</h3>
           <ul>
             <li class="box-input">
@@ -18,18 +17,18 @@
             </li>
             <li class="box-input">
               Schulnummer
-              <input type="text" v-model="values.nummer" placeholder="0123" />
+              <input type="text" v-model="values.nummer" placeholder="0123" required="true" />
               <div class="input-underline">Vierstellig mit führender Null</div>
             </li>
             <li class="box-input">
               Name der Seite
-              <input type="text" v-model="values.name1" placeholder="RSU" maxlength="10" minlength="2" class="" >
-              <input type="text" v-model="values.name2" placeholder="intern" maxlength="10" minlength="2" class="" >
+              <input type="text" v-model="values.name1" placeholder="RSU" maxlength="10" minlength="2" class="" required="true" >
+              <input type="text" v-model="values.name2" placeholder="intern" maxlength="10" minlength="2" class="" required="true" >
               <div class="input-underline">Zweiteilig. z.B. RSU intern</div>
             </li>
             <li class="box-input">
               URI zur Index.php
-              <input type="text" v-model="values.uri" placeholder="https://" />
+              <input type="text" v-model="values.uri" placeholder="https://" required="true" />
               <div class="input-underline">
                 <strong>Beachten Sie bitte folgende Hinweise:</strong>
                 <ul>
@@ -39,8 +38,15 @@
               </div>
             </li>
             <li class="box-input">
+              Modus für Elternbenutzer
+              <select v-model="values.elternbenutzer" class="" required="true">
+                  <option value="ASV_CODE">Registrierungscodes</option>
+                  <option value="ASV_MAIL">E-Mailadresse aus ASV Import verwenden</option>
+              </select>
+            </li>
+            <li class="box-input">
               Stundenplan Software
-              <select v-model="values.stundenplan" class="" >
+              <select v-model="values.stundenplan" class="" required="true">
                   <option value="UNTIS">UNTIS</option>
                   <option value="SPM++">SPM++ / VPM++</option>
                   <option value="TIME2007">TIME2007</option>
@@ -50,21 +56,15 @@
             <li class="box-input">
               Notenverwaltung aktivieren?
               <select v-model="values.notenverwaltung" class="">
-                  <option value="0">Nein</option>
-                  <option value="1">Ja</option>
+                  <option value="false">Nein</option>
+                  <option value="true">Ja</option>
               </select>
               <div class="input-underline">
                 <strong>Bitte beachten:</strong>
                 <br>Die Notenverwaltung ist bisher nur für Gymnasien und die Klassenstunden 5 bis 9 einsetzbar.
               </div>
             </li>
-            <li class="box-input">
-              Modus für Elternbenutzer
-              <select v-model="values.elternbenutzer" class="" >
-                  <option value="ASV_CODE">Registrierungscodes</option>
-                  <option value="ASV_MAIL">E-Mailadresse aus ASV Import verwenden</option>
-              </select>
-          </li>
+            
             
           </ul>
 
@@ -72,23 +72,22 @@
           <ul>
             <li class="box-input">
               Schlüssel für Cron Jobs
-              <input type="text" v-model="values.cronkey" placeholder=""  />
+              <input type="text" v-model="values.cronkey" placeholder="" required="true" />
               <div class="input-underline">
                 Mindestens 20 Stellen, max 30 Stellen
               </div>
             </li>
             <li class="box-input">
               Schlüssel für API
-              <input type="text" v-model="values.apikey" placeholder=""  />
+              <input type="text" v-model="values.apikey" placeholder="" required="true" />
               <div class="input-underline">
                 Mindestens 20 Stellen, max 30 Stellen
               </div>
             </li>
             <li class="box-input">
                 Zu installierende Verson wählen 
-                <select v-model="values.version" class="" >
-                    <option value="stable">Stable - Stabile, geteste Versionen. Geeignet zum Produktivgebrauch.</option>
-                    <option value="beta">Beta - Nicht getestete Beta Versionen. Nicht geeignet zum Produktivgebrauch.</option>
+                <select v-model="values.branch" class="" required="true" >
+                    <option v-bind:key="index" v-for="(item, index) in values.branches" :value="item.Name">{{item.Desc}}</option>
                 </select>
                 <div class="input-underline">
                   Ausgewählte Version wird vom Updateserver heruntergeladen.
@@ -98,7 +97,7 @@
 
         </div>
 
-        <div class="box">
+        <div class="box box-bg-white">
           <h3 class="header-box red">Datenbank</h3>
           <ul>
             <li class="box-input">
@@ -106,23 +105,23 @@
             </li>
             <li class="box-input">
               Datenbank - Host
-              <input type="text" v-model="values.dbhost" placeholder="z.B. localhost" />
+              <input type="text" v-model="values.dbhost" placeholder="z.B. localhost" required="true" />
             </li>
             <li class="box-input">
               Datenbank - Port
-              <input type="text" v-model="values.dbport" placeholder="" />
+              <input type="text" v-model="values.dbport" placeholder="" required="true" />
             </li>
             <li class="box-input">
               Datenbank - Benutzername
-              <input type="text" v-model="values.dbuser" placeholder="z.B. root" />
+              <input type="text" v-model="values.dbuser" placeholder="z.B. root" required="true" />
             </li>
             <li class="box-input">
               Datenbank - Passwort
-              <input type="text" v-model="values.dbpass" placeholder="z.B. secret"/>
+              <input type="text" v-model="values.dbpass" placeholder="z.B. secret"  />
             </li>
             <li class="box-input">
               Datenbank - Datenbankname
-              <input type="text" v-model="values.dbname" placeholder="z.B. schuleinterndatenbank" />
+              <input type="text" v-model="values.dbname" placeholder="z.B. schuleinterndatenbank" required="true" />
             </li>
           </ul>
 
@@ -131,12 +130,12 @@
           <ul>
             <li class="box-input">
               Benutzername
-              <input type="text" v-model="values.adminuser"  readonly/>
+              <input type="text" v-model="values.adminuser" required="true" readonly/>
             </li>
             <li class="box-input">
               Passwort
-              <input type="text" v-model="values.adminpass" />
-              <div class="input-underline">
+              <input type="text" v-model="values.adminpass" required="true" />
+              <div class="input-underline text-red">
                 Bitte merken!
               </div>
             </li>
@@ -160,7 +159,8 @@ import axios from "axios";
 export default {
   name: 'Settings',
   props: {
-    apiRoot: String
+    apiRoot: String,
+    userValues: Object
   },
   data: function () {
     return {
@@ -169,7 +169,12 @@ export default {
   },
   created: function () {
     
-    this.init();
+    if (this.userValues.name) {
+      this.setData(this.userValues);
+    } else {
+      this.init();
+    }
+    
   
   },
   methods: {
@@ -198,15 +203,16 @@ export default {
         || !this.values.name2
         || !this.values.uri
         || !this.values.stundenplan
-        || !this.values.notenverwaltung
+        // || this.values.notenverwaltung == ''
         || !this.values.elternbenutzer
-        || !this.values.version
+        || !this.values.branch
         || !this.values.cronkey
         || !this.values.apikey
         || !this.values.dbhost
         || !this.values.dbport
-        || !this.values.dbpass
+        //|| !this.values.dbpass
         || !this.values.dbname
+        || !this.values.dbuser
          ) {
           return false;
       } else {
@@ -216,39 +222,21 @@ export default {
     },
     install: function () {
 
-      //TODO: auskommentieren
-      // if ( !this.required() ) {
-      //     return false;
-      // }
-
-      var that = this;
-
-      var params = new URLSearchParams();
-
-      for (var prop in this.values) {
-        params.append(prop, this.values[prop]);
+      if ( !this.required() ) {
+          // TODO: error msg
+          console.log(this.values);
+          console.log('error: required');
+          return false;
       }
+      this.values.branches = false;
 
-      axios.post(this.apiRoot+'setup.php?action=install', params)
-      .then( function(response) {
+      EventBus.$emit('done--step', {
+        settings: true,
+        values: this.values
+      })
 
-        if ( response.data.install == true ) {
 
-          EventBus.$emit('done--step', {
-            settings: true,
-            values: that.values
-          })
-
-        } else {
-          // TODO:
-          console.log('error');
-        }
-        
-
-        
-      }).catch(function (error) {
-        console.error(error);
-      });
+      
 
 
       
