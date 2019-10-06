@@ -2,18 +2,15 @@
   <div class="server">
 
     <div class="outer-box">
-      <div class="box">
+      <div class="boxlist">
+        <h2>Herzlich Willkommen bei der Installation zu SchuleIntern.</h2>
         <p>
-          <strong>Herzlich Willkommen bei der Installation zu SchuleIntern.</strong>
-          <br>
-          <br>
-          <br>
           Bitte legen Sie sich folgende Daten bereit:
-          <br><br>
         </p>
         <ul class="ullist">
+          <li>Ihren Schulnamen und die Schulnummer</li>
           <li>MySQL / MariaDB Datenbank mit passenden Zugangsdaten</li>
-          <li>Mailaccount mit passenden Zugangsdaten</li>
+          <li>Name der Stundenplansoftware</li>
         </ul>
       </div>
       <div class="box box-bg-white">
@@ -26,7 +23,7 @@
             <div class="box-long">
               Schreibrechte im Übergeordnetem Verzeichnis
               <p>
-                SchuleIntern speichert alle Daten außerhalb des von außen erreichbaren Verzeichnisses.
+                Zur Sicherheit speichert SchuleIntern alle Daten außerhalb des öffentlichen Bereichs.
               </p>
               <div class="info">
                 {{values.upperDir}}
@@ -38,7 +35,6 @@
               <img v-if="loading" src="../assets/icons/spinner.gif" alt="loading" title="loading"/>
             </div>
           </li>
-
           <li>
             <div class="box-long">
               Schreibrechte im aktuellen Verzeichnis
@@ -52,7 +48,6 @@
               <img v-if="loading" src="../assets/icons/spinner.gif" alt="loading" title="loading"/>
             </div>
           </li>
-
           <li>
             <div class="box-long">
               PHP Version
@@ -74,7 +69,7 @@
             </div>
             <div class="box-icon">
               <img v-if="!loading && values.branches" src="../assets/icons/check.svg" alt="ok" title="ok"/>
-              <img v-else-if="!loading && values.branches == false" src="../assets/icons/cancel.svg" alt="error" title="error"/>
+              <img v-else-if="!loading && ( !values.branches || values.branches == false)" src="../assets/icons/cancel.svg" alt="error" title="error"/>
               <img v-if="loading" src="../assets/icons/spinner.gif" alt="loading" title="loading"/>
             </div>
           </li>
@@ -123,7 +118,7 @@ export default {
 
       this.loading = true;
 
-      axios.get(this.apiRoot+'setup.php?action=server')
+      axios.get(this.apiRoot+'install.php?action=server')
       .then( function(response) {
         that.setData(response.data);
         
