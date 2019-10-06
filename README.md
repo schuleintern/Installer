@@ -1,11 +1,13 @@
 # SchuleIntern - installer
 
-## Project init
+
+## Development
+
+
+### Project init
 ```
 npm install
 ```
-
-## Development
 
 ### Compiles and hot-reloads for development
 ```
@@ -16,3 +18,10 @@ npm run serve
 ```
 npm run release
 ```
+
+
+## How To Use
+
+- Download Repro
+- Move "www" to your Webserver
+- open YOUR_URL/install
