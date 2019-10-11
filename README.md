@@ -1,6 +1,16 @@
 # SchuleIntern - installer
 
 
+## How To Use
+
+- Download Repro
+- Move "www" to your Webserver
+- open YOUR_URL/install
+
+
+
+
+
 ## Development
 
 
@@ -20,8 +30,3 @@ npm run release
 ```
 
 
-## How To Use
-
-- Download Repro
-- Move "www" to your Webserver
-- open YOUR_URL/install

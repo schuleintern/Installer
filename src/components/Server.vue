@@ -64,6 +64,17 @@
 
           <li>
             <div class="box-long">
+              PHP Zip Erweiterung
+            </div>
+            <div class="box-icon">
+              <img v-if="!loading && values.zipEnable" src="../assets/icons/check.svg" alt="ok" title="ok"/>
+              <img v-else-if="!loading && values.zipEnable == false" src="../assets/icons/cancel.svg" alt="error" title="error"/>
+              <img v-if="loading" src="../assets/icons/spinner.gif" alt="loading" title="loading"/>
+            </div>
+          </li>
+
+          <li>
+            <div class="box-long">
               Verbindung zum Update Server
               <div class="info"></div>
             </div>

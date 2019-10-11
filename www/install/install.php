@@ -26,6 +26,8 @@ switch ($action) {
         $branches = true;
     }
 
+    $zip = new ZipArchive();
+
     $return = array(
       'currentDir' => FOLDER_WWW,
       'currentDirWriteAble' => is_writable(FOLDER_WWW),
@@ -33,7 +35,8 @@ switch ($action) {
       'upperDirWriteable' => is_writable(FOLDER_ROOT), // Ein Verzeichnis nach oben
       'phpVersion' => phpversion(),
       'phpVersionCompare' => version_compare(phpversion(), '7.2.0', '>'),
-      'branches' => $branches
+      'branches' => $branches,
+      'zipEnable' => $zip ? true : false
     );
 
     echo json_encode($return);
