@@ -116,13 +116,13 @@
           <ul>
             <li class="padding-tb">
               <div>
-                <div class="input-small">http://installer:8888/cron.php?cronkey=YNzXcU9vHeUYoRhfhjcV9R9KSg8dOk</div>
+                <div class="input-small">{{cronUrl1}}</div>
                 <div class="input-underline">Alle 15 Minuten</div>
               </div>
             </li>
             <li>
               <div class="padding-tb">
-                <div class="input-small">http://installer:8888/cron.php?cronkey=YNzXcU9vHeUYoRhfhjcV9R9KSg8dOk&cronName=MailSender</div>
+                <div class="input-small">{{cronUrl2}}</div>
                 <div class="input-underline">Alle 3 Minuten</div>
               </div>
             </li>
@@ -147,11 +147,11 @@
           <button class="btn" @click="openSystem">Zur Website</button>
 
         </div>
-
       </div>
-    
     </div>
-        
+
+    <!-- <button class="btn" @click="back">Zurück</button> -->
+
   </div>
 </template>
 
@@ -172,6 +172,9 @@ export default {
 
       loadingDeleteFolder: false,
 
+      cronUrl1: '',
+      cronUrl2: '',
+      
       list: {  // Reihenfolge ist wichtig!
         downloadBranch: false,
         moveFiles: false,
@@ -203,8 +206,14 @@ export default {
       if (!next) {
         console.log('---- loop ende ----');
         // Loop ist fertig
+
+        this.cronUrl1 = this.userValues.uri.replace("index.php","cron.php?cronkey="+this.userValues.cronkey);
+        this.cronUrl2 = this.userValues.uri.replace("index.php","cron.php?cronkey="+this.userValues.cronkey+"&cronName=MailSender");
+
         this.install = false;
+
         for (const key of list) {
+          // If error:
           if (this.list[key] == false) {
             this.install = true;
           }
