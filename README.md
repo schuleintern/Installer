@@ -29,4 +29,7 @@ npm run serve
 npm run release
 ```
 
+### PHP Modification
 
+at ./install.php
+NOT ./www/install/install.php !!!
