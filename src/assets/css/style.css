@@ -112,6 +112,14 @@ nav ul li  {
   color: #00a65a;
 }
 
+.box-red {
+  background-color: #8b0000;
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+  padding: 1rem;
+}
+
 .btn {
   background-color: #3c8dbc;
   border-color: #367fa9;
@@ -345,4 +353,11 @@ nav ul li  {
 
 .spacer-top {
   margin-top: 3rem;
+}
+
+.icon-done {
+  width: 2rem;
+  align-self: center;
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
 }

@@ -242,17 +242,15 @@ switch ($action) {
   */
   case 'deleteFolder';
 
-    if ( !rrmdir(FOLDER_SETUP) ) {
+    $return = array('install' => true);
+
+    $return['deleteFolder'] = rrmdir(FOLDER_SETUP);
+
+    if ( !$return['deleteFolder'] ) {
       $return =  array(
+        'install' => false,
         'errorMsg' => 'Ordner konnte nicht gelöscht werden!'
       );
-    }
-
-    $return =  array(
-      'deleteFolder' => true
-    );
-    if ( $return['return'] === true ) {
-      $return['install'] = true;
     }
 
     echo json_encode($return);
@@ -370,12 +368,42 @@ class Installer {
         Passwort: <span>'.$_POST['adminpass'].'</span>
         <br>
         <br>
-        <b>Support Forum</b>
+
+        <h1>Und jetzt?</h1>
+        <strong>Um das System in den Beriebszustand zu versetzen und abzusichern, müssen Sie noch folgendes erledigen:</strong>
         <br>
+
+        <h3>1. Cronjobs</h3>
+        <p>Folgende Cronjobs müssen noch bei Ihrem Hoster angelegt werden:</p>
+        <ul>
+            <li>
+                http://installer:8888/cron.php?cronkey=mddcAmNRxQsusTXwP628qYWOBsf4IC
+                <br>
+                Alle 15 Minuten
+            </li>
+            <li>
+              http://installer:8888/cron.php?cronkey=mddcAmNRxQsusTXwP628qYWOBsf4IC&amp;cronName=MailSender
+              <br>
+              Alle 3 Minuten
+            </li>
+        </ul>
+
+        <h3>2. Domian</h3>
+        <p>Falls noch nicht geschehen ändern Sie bitte den Pfad der Domain direkt auf den "www" Ordner. Die Einstellungen dazu können Sie bei Ihrem Webhoster vornehmen.</p>
+
+        <h3>3. Installationsordner entfernen</h3>
+        <p>Damit keine weitere Installation durchgeführt werden kann, muss der "install" Ordner vom Server gelöscht werden</p>
+
+        <h3>4. Support-Forum</h3>
+        <p>Falls Sie Fragen oder Anregungen haben besuchen Sie unser Forum. Dort können mit der Community Lösungen, Probleme oder Wünsche besprochen werden.</p>
         <a href="https://www.schule-intern.de/forum/">https://www.schule-intern.de/forum/</a>
+        
+        <div class="spacer-top"></div>
+        <h2>Viel Erfolg mit Ihrer Installation der SchuleIntern Software!</h2>
+        <a href="'.$_POST['uri'].'">Zur Website</a>
+    
       </body>
     </html>';
-    
 
     $empfaenger = (string)$_POST['adminemail'] ; //Mailadresse
     $absender   = "SchuleIntern";

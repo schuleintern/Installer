@@ -136,7 +136,12 @@
 
           <h3>3. Installationsordner entfernen</h3>
           <p>Damit keine weitere Installation durchgeführt werden kann, muss der "install" Ordner vom Server gelöscht werden</p>
-          <button class="btn red" @click="deleteFolder">Jetzt löschen</button>
+          <button v-if="loadingDeleteFolder == false"
+            class="btn red" @click="deleteFolder">Jetzt löschen</button>
+          <img v-if="loadingDeleteFolder == 'done'" src="../assets/icons/check.svg" alt="ok" title="ok" class="icon-done"/>
+          <div v-if="loadingDeleteFolder == 'error'" class="box-red">{{loadingDeleteFolderError}}</div>
+          <img v-if="loadingDeleteFolder == true" src="../assets/icons/spinner.gif" alt="loading" title="loading" class="icon-done"/>
+
 
           <h3>4. Support-Forum</h3>
           <p>Falls Sie Fragen oder Anregungen haben besuchen Sie unser Forum. Dort können mit der Community Lösungen, Probleme oder Wünsche besprochen werden.</p>
@@ -149,8 +154,6 @@
         </div>
       </div>
     </div>
-
-    <!-- <button class="btn" @click="back">Zurück</button> -->
 
   </div>
 </template>
@@ -171,6 +174,7 @@ export default {
       install: true,
 
       loadingDeleteFolder: false,
+      loadingDeleteFolderError: 'Das Löschen war nicht erfolgreich. Bitte löschen Sie den Ordner manuell!',
 
       cronUrl1: '',
       cronUrl2: '',
@@ -204,7 +208,7 @@ export default {
       }
 
       if (!next) {
-        console.log('---- loop ende ----');
+        //console.log('---- loop ende ----');
         // Loop ist fertig
 
         this.cronUrl1 = this.userValues.uri.replace("index.php","cron.php?cronkey="+this.userValues.cronkey);
@@ -270,11 +274,15 @@ export default {
 
       axios.get(this.apiRoot+'install.php?action=deleteFolder')
       .then( function(response) {
+        if (response.data.install == true) {
+          that.loadingDeleteFolder = 'done';
+        } else {
+          that.loadingDeleteFolder = 'error';
+        }
         
-        that.loadingDeleteFolder = false;
 
       }).catch(function (error) {
-        that.loadingDeleteFolder = false;
+        that.loadingDeleteFolder = 'error';
         console.error(error);
       });
 
