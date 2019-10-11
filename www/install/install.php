@@ -348,6 +348,8 @@ class Installer {
 
   public function sendMail() {
 
+    $cronurl = str_replace('index.php','cron.php?cronkey='.$_POST['cronkey'], $_POST['uri']);
+
     $mailtext = '<html>
       <head>
           <title>Installation SchuleIntern</title>
@@ -377,12 +379,12 @@ class Installer {
         <p>Folgende Cronjobs müssen noch bei Ihrem Hoster angelegt werden:</p>
         <ul>
             <li>
-                http://installer:8888/cron.php?cronkey=mddcAmNRxQsusTXwP628qYWOBsf4IC
+                '.$cronurl.'
                 <br>
                 Alle 15 Minuten
             </li>
             <li>
-              http://installer:8888/cron.php?cronkey=mddcAmNRxQsusTXwP628qYWOBsf4IC&amp;cronName=MailSender
+              '.$cronurl.'&cronName=MailSender
               <br>
               Alle 3 Minuten
             </li>
@@ -401,7 +403,7 @@ class Installer {
         <div class="spacer-top"></div>
         <h2>Viel Erfolg mit Ihrer Installation der SchuleIntern Software!</h2>
         <a href="'.$_POST['uri'].'">Zur Website</a>
-    
+        <br><br>
       </body>
     </html>';
 
